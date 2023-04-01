@@ -7,7 +7,7 @@
 |백앤드|최용욱|
 |프론트앤드|민병수|
 
-#Stack
+# Stack
 Node.js Xcode
 
 ### 커밋컨벤션
