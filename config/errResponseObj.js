@@ -4,7 +4,11 @@ const errResponseObj = {
     EXCEL_EXIST_ERROR : {isSuccess : false, code : 4003, message : "please upload excel file"},
     INTERNAL_ERROR : {isSuccess : false, code : 5000, message : null},
     ORGANIZATION_DATA_EXIT_ERROR : {isSuccess : false, code : 4004, message : "please give organization name or list"},
-    DB_QUERY_ERROR : {isSuccess : false, code : 4005, message : null}
+    DB_QUERY_ERROR : {isSuccess : false, code : 4005, message : null},
+    SIGN_UP_EXIST_ERROR : {isSuccess : false, code : 4006, message : "please give sign-up data"},
+    CLUB_NOT_FOUND : {isSuccess : false, code : 4007, message : "the club that you want is not found"},
+    USER_NOT_FOUND : {isSuccess : false, code : 4008, message : "the user is not found"},
+    USER_NOT_CLUB : {isSuccess : false, code : 4009, message : "the user is not member of club"}
 }
 
 export default errResponseObj
