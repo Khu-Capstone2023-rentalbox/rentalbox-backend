@@ -2,6 +2,11 @@ import xlsx from "xlsx"
 import path from "path"
 import pool from "../../config/database"
 import userDao from "./userDao"
+import userProvider from "./userProvider"
+import { errResponse } from "../../config/response"
+import errResponseObj from "../../config/errResponseObj"
+import jwt from "jsonwebtoken"
+import privateInfo from "../../config/privateInfo"
 
 const userService = {
     readExcel : async(filename, filepath, name) => {
@@ -34,17 +39,47 @@ const userService = {
         const insesrtOrganizationParam = [organizationName, list.length]
         
         const organizationResult = await userDao.insertGroup(connection, insesrtOrganizationParam)
-        if (organizationResult.error)
+        if (organizationResult.error){
+            connection.release()
             return organizationResult
+        }
         else{
             const memberResult = await userDao.insertUserBulk(connection,list,organizationResult.insertId, list.length)
 
-            if (memberResult.error)
+            if (memberResult.error){
+                connection.release()
                 return memberResult
+            }
+            connection.release()
             return {
                 insertedOrganization : organizationResult.insertId,
                 insertedMemberCount : memberResult.insertedCount
             }
+        }
+    },
+    loginUser : async(memberId, clubId) =>{
+        const clubExist = await userProvider.getClubById(clubId)
+        const userExist = await userProvider.getUserById(memberId)
+        if (clubExist.length == 0)
+            return { error : true, obj : errResponse(errResponseObj.CLUB_NOT_FOUND)}
+        else if (userExist.length == 0)
+            return{ error : true, obj: errResponse(errResponseObj.USER_NOT_FOUND)}
+        else{
+            console.log(clubExist[0].id, userExist[0].id, userExist[0].club_id)
+            if (clubExist[0].id === userExist[0].club_id){
+            let token = await jwt.sign({
+                userId : userExist[0].Id,
+                userClub : userExist[0].club_id
+            },
+            privateInfo.JWT_SECRET,
+            {
+                expiresIn : "30d",
+                subject : "userInfo"
+            });
+                return {error : false, token}
+        }
+            else
+                return {error : true, obj : errResponse(errResponseObj.USER_NOT_CLUB)}
         }
     }
     

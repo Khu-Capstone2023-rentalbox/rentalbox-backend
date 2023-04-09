@@ -52,6 +52,43 @@ const userDao = {
             } 
         }
     },
+    selectClubById : async(connection, clubId) =>{
+        const sql = `select id from club where id = ${clubId}`
+        try{
+            await connection.beginTransaction()
+            const [queryResult] = await connection.execute(sql)
+
+            await connection.commit()
+
+            return queryResult
+        }catch(e){
+            console.log(e)
+            await connection.rollback()
+            return {
+                error : true,
+                message : `error type : ${e.name}, error message : ${e.message}`
+            } 
+        }
+    },
+    selectUserById : async(connection, userId) =>{
+        const sql = `select id, club_id from user where id = '${userId}'`
+        try{
+            await connection.beginTransaction()
+            const [queryResult] = await connection.execute(sql)
+
+            console.log("the user's data in dao", queryResult)
+            await connection.commit()
+
+            return queryResult
+        }catch(e){
+            console.log(e)
+            await connection.rollback()
+            return {
+                error : true,
+                message : `error type : ${e.name}, error message : ${e.message}`
+            } 
+        }
+    }
 }
 
 export default userDao

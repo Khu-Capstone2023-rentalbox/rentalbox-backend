@@ -46,7 +46,14 @@ const middlewares = {
     uploadPicture : (req,res,next) =>{
         next()
     },
-    uploadExel : multer({storage, limits : {fieldSize : 10000000}})
+    uploadExel : multer({storage, limits : {fieldSize : 1000000}}),
+    serverErrorResolver : (req, res, e) => {
+        console.log(e)
+        let errResponseData = errResponseObj.INTERNAL_ERROR
+        errResponseData.message = `type : ${e.name}, message : ${e.message}`
+        console.log(errResponseData)
+        return res.status(500).json(errResponse(errResponseData))
+    }
 }
 
 export default middlewares
