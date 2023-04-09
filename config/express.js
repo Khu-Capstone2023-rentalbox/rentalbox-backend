@@ -13,6 +13,8 @@ app.use(express.urlencoded({extended : true}))
 
 app.use(cors())
 
+
+app.use("files", express.static("files"))
 app.use('/users', userRouter)
 app.use('/items', itemRouter)
 

@@ -2,6 +2,13 @@ import privateInfo from "./privateInfo";
 import jwt from "jsonwebtoken"
 import { errResponse } from "./response";
 import errResponseObj from "./errResponseObj";
+import multer from "multer"
+
+
+const storage = multer.diskStorage({
+    destination : (req, file, cb) => cb(null, 'files/excels'),
+    filename : (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+})
 
 const middlewares = {
     jwtMiddleware : (req,res,next) =>{
@@ -38,7 +45,8 @@ const middlewares = {
     },
     uploadPicture : (req,res,next) =>{
         next()
-    }
+    },
+    uploadExel : multer({storage, limits : {fieldSize : 10000000}})
 }
 
 export default middlewares
