@@ -8,7 +8,8 @@ const errResponseObj = {
     SIGN_UP_EXIST_ERROR : {isSuccess : false, code : 4006, message : "please give sign-up data"},
     CLUB_NOT_FOUND : {isSuccess : false, code : 4007, message : "the club that you want is not found"},
     USER_NOT_FOUND : {isSuccess : false, code : 4008, message : "the user is not found"},
-    USER_NOT_CLUB : {isSuccess : false, code : 4009, message : "the user is not member of club"}
+    USER_NOT_CLUB : {isSuccess : false, code : 4009, message : "the user is not member of club"},
+    KEYWORD_EXIT_ERROR : {isSuccess : false, code : 4010, message : "give search keyword"}
 }
 
 export default errResponseObj
