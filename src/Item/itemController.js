@@ -20,6 +20,19 @@ const itemController = {
             middlewares.serverErrorResolver(req,res,e)
         }
     },
+    getItem : async(req,res) => {
+        try{
+            const itemId = req.params.itemId;
+            
+            if (!itemId)
+                return res.status(400).json(errResponse(errResponseObj.KEYWORD_EXIT_ERROR))
+
+            const selectItemInfo  = await itemProvider.selectItem(itemId);
+            return res.send(selectItemInfo);
+        }catch(e){
+            middlewares.serverErrorResolver(req,res,e)
+        }
+    },
 }
  
 export default itemController
