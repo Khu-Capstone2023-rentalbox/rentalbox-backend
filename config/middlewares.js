@@ -3,11 +3,27 @@ import jwt from "jsonwebtoken"
 import { errResponse } from "./response";
 import errResponseObj from "./errResponseObj";
 import multer from "multer"
+import multerS3 from "multer-s3"
+import aws from "aws-sdk"
 
 
 const storage = multer.diskStorage({
     destination : (req, file, cb) => cb(null, 'files/excels'),
     filename : (req, file, cb) => cb(null, Date.now() + '-' + file.originalname)
+})
+
+const s3 = new aws.S3({
+    credentials : {
+        accessKeyId : privateInfo.AWS_ID,
+        secretAccessKey : privateInfo.AWS_SECRET
+    }   
+})
+
+const multerS3Uploader = multerS3({
+    s3,
+    bucket : 'rentalbox',
+    key : (req, file, cb) => cb(null, file.originalname),
+    acl : 'public-read'
 })
 
 const middlewares = {
@@ -43,9 +59,13 @@ const middlewares = {
             }).catch(onError);
         }
     },
-    uploadPicture : (req,res,next) =>{
-        next()
-    },
+    s3Upload : multer({
+        dest : 'uploads/images/',
+        limits : {
+            fieldSize : 10000000,
+        },
+        storage : multerS3Uploader
+    }),
     uploadExel : multer({storage, limits : {fieldSize : 1000000}}),
     serverErrorResolver : (req, res, e) => {
         console.log(e)

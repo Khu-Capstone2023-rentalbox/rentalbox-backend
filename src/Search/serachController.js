@@ -7,12 +7,12 @@ import searchProvider from "./searchProvider"
 const searchController = {
     getSearch : async(req,res) =>{
         try{
-        const {keyword} = req.query
+        const {keyword, last} = req.query
         console.log(keyword)
         if (typeof keyword === "undefined")
             return res.status(400).json(errResponse(errResponseObj.KEYWORD_EXIT_ERROR))
         
-        const result  = await searchProvider.searchByKeyword(keyword)
+        const result  = await searchProvider.searchByKeyword(keyword, last)
         return res.json(response(responseObj,result))
 
         }catch(e){

@@ -3,7 +3,8 @@ const itemController = {
         
     },
     getItemListByPicture : async(req,res) =>{
-
+        console.log(req.file.location)
+        res.json(req.file)
     }
 }
 
