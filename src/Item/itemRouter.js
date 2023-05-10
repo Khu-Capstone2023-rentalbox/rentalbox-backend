@@ -4,10 +4,11 @@ import middlewares from "../../config/middlewares"
 
 const itemRouter = express.Router()
 
+itemRouter.get('/',middlewares.jwtMiddleware,itemController.getItemList)
+itemRouter.post('/picture',middlewares.jwtMiddleware,middlewares.s3Upload.single('picture'), itemController.getItemListByPicture)
 itemRouter.post('/',itemController.addItem)
 
 itemRouter.get('/:itemId',itemController.getItem)
-//itemRouter.get('/picture',middlewares.jwtMiddleware,middlewares.uploadPicture, itemController.getItemListByPicture)
 
 
 export default itemRouter
