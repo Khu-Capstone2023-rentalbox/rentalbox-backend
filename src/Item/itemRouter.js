@@ -6,6 +6,9 @@ const itemRouter = express.Router()
 
 itemRouter.get('/',middlewares.jwtMiddleware,itemController.getItemList)
 itemRouter.post('/picture',middlewares.jwtMiddleware,middlewares.s3Upload.single('picture'), itemController.getItemListByPicture)
+itemRouter.post('/',itemController.addItem)
+
+itemRouter.get('/:itemId',itemController.getItem)
 
 
 export default itemRouter
