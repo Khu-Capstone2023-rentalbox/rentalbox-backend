@@ -40,6 +40,7 @@ const itemProvider = {
             } 
         }
     },
+
     selectMyItem : async(itemId) => {
         try {
             console.log("Select my item by id:", itemId);

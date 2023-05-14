@@ -47,11 +47,15 @@ const userController = {
     },
     signUpOrganization : async(req, res) =>{
         try{
-            const {list, name:organizationName} = req.body
-            console.log("in controller", list, organizationName)
-            if (typeof list == "undefined" || typeof organizationName == "undefined")
-                return res.status(400).json(errResponse(errResponseObj.ORGANIZATION_DATA_EXIT_ERROR))
-            const result = await userService.addOrganizationAndMember(organizationName, list)
+            const {name:organizationName} = req.body
+            const {filename, path} = req.file
+            console.log("in controller",filename, organizationName)
+            if (typeof filename == "undefined" || typeof path == "undefined")
+            return res.status(400).json(errResponse(errResponseObj.EXCEL_EXIST_ERROR))
+            const excel = await userService.readExcel(filename, path, organizationName)
+            console.log(excel)
+
+            const result = await userService.addOrganizationAndMember(organizationName, excel)
 
             if (result.error){
                 let errResponseData = errResponseObj.DB_QUERY_ERROR
@@ -66,7 +70,7 @@ const userController = {
             console.log(e)
             let errResponseData = errResponseObj.INTERNAL_ERROR
             errResponseData.message = `type : ${e.name}, message : ${e.message}`
-            console.status(500).log(errResponseData)
+            console.log(errResponseData)
             return res.json(errResponse(errResponseData))
         }
     }
