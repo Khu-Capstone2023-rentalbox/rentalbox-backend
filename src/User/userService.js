@@ -67,8 +67,9 @@ const userService = {
         else{
             console.log(clubExist[0].id, userExist[0].id, userExist[0].club_id)
             if (clubExist[0].id === userExist[0].club_id){
+                console.log(userExist[0])
             let token = await jwt.sign({
-                userId : userExist[0].Id,
+                userId : userExist[0].id,
                 userClub : userExist[0].club_id
             },
             privateInfo.JWT_SECRET,
