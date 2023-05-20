@@ -11,7 +11,8 @@ const errResponseObj = {
     USER_NOT_CLUB : {isSuccess : false, code : 4009, message : "the user is not member of club"},
     KEYWORD_EXIT_ERROR : {isSuccess : false, code : 4010, message : "give search keyword"},
     ITEMNAME_EXIT_ERROR : {isSuccess : false, code : 4011, message : "give item name"},
-    ITEMID_EXIT_ERROR : {isSuccess : false, code : 4012, message : "give item id"}
+    ITEMID_EXIT_ERROR : {isSuccess : false, code : 4012, message : "give item id"},
+    USERID_EXIT_ERROR : {isSuccess : false, code : 4012, message : "give user id"}
 }
 
 export default errResponseObj
