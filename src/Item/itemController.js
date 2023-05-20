@@ -34,6 +34,10 @@ const itemController = {
             middlewares.serverErrorResolver(req,res,e)
         }
     },
+    getItemListByPicture : async(req,res) =>{
+        console.log(req.file.location)
+        res.json(req.file)
+    },
     getMyItem : async(req,res) => {
         try{
             const itemId = req.params.itemId;
