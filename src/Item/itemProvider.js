@@ -58,6 +58,30 @@ const itemProvider = {
             } 
         }
     },
+    selectMyList : async(userId, page, pageSize) => {
+        try {
+            console.log("Select my list by id:", userId);
+            
+            let startIndex = 0
+
+            if (page!=1){
+                startIndex = (page - 1) * pageSize;
+            }
+            const endIndex = startIndex + parseInt(pageSize);
+
+            const connection = await pool.getConnection(async (conn) => conn);
+            const selectMyListResult = await itemDao.selectMyListByUserId(connection, userId, startIndex, endIndex);
+
+            connection.release();
+
+            return selectMyListResult
+        } catch (err){
+            return {
+                error : true,
+                message : `error type : ${err.name}, error message : ${err.message}`
+            } 
+        }
+    }
 }
 
 export default itemProvider
