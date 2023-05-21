@@ -23,6 +23,7 @@ const itemDao = {
         const [queryResult] = await connection.query(sql, itemId);
         return queryResult[0]
     },
+
     selectMyListByUserId : async(connection, userId, startIndex, endIndex) => {
         const sql = `SELECT i.id AS item_id, i.name AS item_name, r.rental_time
                     FROM items i

@@ -13,6 +13,7 @@ const errResponseObj = {
     ITEMNAME_EXIT_ERROR : {isSuccess : false, code : 4011, message : "give item name"},
     ITEMID_EXIT_ERROR : {isSuccess : false, code : 4012, message : "give item id"},
     USERID_EXIT_ERROR : {isSuccess : false, code : 4012, message : "give user id"}
+    ITEMID_EXIT_ERROR : {isSuccess : false, code : 4012, message : "give item id"}
 }
 
 export default errResponseObj
