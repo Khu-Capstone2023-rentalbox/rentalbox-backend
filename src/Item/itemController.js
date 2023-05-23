@@ -10,11 +10,16 @@ const itemController = {
         try{
             const itemName = req.body.itemName;
             const count = req.body.count;
-            const clubId = req.verifiedToken.club;
-            
+            const clubId = req.verifiedToken.userClub;
+
             if (!itemName)
                 return res.status(400).json(errResponse(errResponseObj.ITEMNAME_EXIT_ERROR))
             const addItemInfo  = await itemService.addItem(itemName, count, clubId);
+            if (addItemInfo.error){
+                let errResponseData = errResponseObj.DB_QUERY_ERROR
+                errResponseData.message = addItemInfo.message
+                return res.status(500).json(errResponse(errResponseData))
+            }
             return res.json(response(responseObj));
         }catch(e){
             middlewares.serverErrorResolver(req,res,e)

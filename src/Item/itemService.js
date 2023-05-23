@@ -1,4 +1,4 @@
-import {pool} from "../../config/database"
+import pool from "../../config/database";
 import itemDao from "./itemDao"
 
 const userService = {
@@ -6,9 +6,15 @@ const userService = {
         try {
             console.log("Add item", itemName, count);
             
-            const connection = await pool.getConnection(async (conn) => conn);
+            const connection = await pool.getConnection(async conn => conn);
             const addItemResult = await itemDao.insertItem(connection, itemName, count, clubId);
-            connection.release();
+            console.log(addItemResult)
+            if (addItemResult.error){
+                connection.release()
+                return addItemResult
+            }
+            else
+                return addItemResult
         } catch (err){
             return {
                 error : true,

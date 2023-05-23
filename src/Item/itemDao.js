@@ -3,8 +3,21 @@ import userService from "./itemService";
 const itemDao = {
     insertItem : async(connection, itemName, count, clubId) =>{
         const sql = `INSERT INTO items (name, count, club_id) VALUES (?, ?, ?);`
-        const [queryResult] = await connection.query(sql, [itemName, count, clubId]);
-        return queryResult
+        try{
+            
+            await connection.beginTransaction()
+            const [queryResult] = await connection.query(sql, [itemName, count, clubId]);
+            console.log(queryResult)
+            await connection.commit()
+            return queryResult
+        }catch(e){
+            console.log(e)
+            await connection.rollback()
+            return {
+                error : true,
+                message : `error type : ${e.name}, error message : ${e.message}`
+            }
+        }
     },
     selectByItemId : async(connection, itemId) => {
         const sql = `SELECT i.name, i.count, u.name AS owner_name, r.rental_time
