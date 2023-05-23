@@ -44,7 +44,7 @@ const itemDao = {
         const sql = `select (select name from items where id = r.target) as itemName ,r.target as itemId,DATE_FORMAT(r.rental_time, '%Y-%m-%d') as rentalTime
         from user as u join rental as r
             on r.owner = u.id
-                where u.id = r.owner and u.id = '20181023'
+                where u.id = r.owner and u.id = '${userId}'
                         order by r.rental_time desc;`
         const [queryResult] = await connection.query(sql);
         console.log(queryResult)
