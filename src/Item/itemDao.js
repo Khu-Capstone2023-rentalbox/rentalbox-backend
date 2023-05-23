@@ -40,13 +40,13 @@ const itemDao = {
         return queryResult[0]
     },
 
-    selectMyListByUserId : async(connection, userId, startIndex, endIndex) => {
-        const sql = `SELECT i.id AS item_id, i.name AS item_name, r.rental_time
-                    FROM items i
-                    JOIN rental r ON i.id = r.target
-                    WHERE r.owner = ?
-                    LIMIT ?, ?;`
-        const [queryResult] = await connection.query(sql, [userId, startIndex, endIndex]);
+    selectMyListByUserId : async(connection, userId) => {
+        const sql = `select (select name from items where id = r.target) as itemName ,r.target as itemId,DATE_FORMAT(r.rental_time, '%Y-%m-%d') as rentalTime
+        from user as u join rental as r
+            on r.owner = u.id
+                where u.id = r.owner and u.id = '20181023'
+                        order by r.rental_time desc;`
+        const [queryResult] = await connection.query(sql);
         console.log(queryResult)
         return queryResult
     }

@@ -88,6 +88,25 @@ const userDao = {
                 message : `error type : ${e.name}, error message : ${e.message}`
             } 
         }
+    },
+    selectUserName : async(connection, userId) =>{
+        const sql = `select name from user where id = '${userId}'`
+        try{
+            await connection.beginTransaction()
+            const [[{name}]] = await connection.execute(sql)
+
+            console.log("the user's data in dao", name)
+            await connection.commit()
+
+            return name
+        }catch(e){
+            console.log(e)
+            await connection.rollback()
+            return {
+                error : true,
+                message : `error type : ${e.name}, error message : ${e.message}`
+            } 
+        }
     }
 }
 

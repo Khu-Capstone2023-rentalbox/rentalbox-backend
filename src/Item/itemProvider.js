@@ -1,4 +1,5 @@
 import pool from "../../config/database"
+import userDao from "../User/userDao";
 import itemDao from "./itemDao"
 
 const itemProvider = {
@@ -60,23 +61,21 @@ const itemProvider = {
             } 
         }
     },
-    selectMyList : async(userId, page, pageSize) => {
+    selectMyList : async(userId) => {
         try {
             console.log("Select my list by id:", userId);
-            
-            let startIndex = 0
-
-            if (page!=1){
-                startIndex = (page - 1) * pageSize;
-            }
-            const endIndex = startIndex + parseInt(pageSize);
 
             const connection = await pool.getConnection(async (conn) => conn);
-            const selectMyListResult = await itemDao.selectMyListByUserId(connection, userId, startIndex, endIndex);
+            const responseResult = {userName : null, list : null}
+
+            responseResult.userName = await userDao.selectUserName(connection,userId);
+
+            responseResult.list = await itemDao.selectMyListByUserId(connection, userId);
 
             connection.release();
 
-            return selectMyListResult
+            console.log(responseResult)
+            return responseResult
         } catch (err){
             return {
                 error : true,

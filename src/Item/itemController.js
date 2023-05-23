@@ -58,14 +58,12 @@ const itemController = {
     },
     getMyList : async(req, res) => {
         try {
-            const userId = req.params.userId;
-            const page = req.query.page;
-            const pageSize = req.query.pageSize;
+            const {userId} = req.verifiedToken;
             
             if (!userId)
             return res.status(400).json(errResponse(errResponseObj.USERID_EXIT_ERROR))
 
-            const selectMyListInfo  = await itemProvider.selectMyList(userId, page, pageSize);
+            const selectMyListInfo  = await itemProvider.selectMyList(userId);
             return res.json(response(responseObj, selectMyListInfo));
         } catch(e){
             middlewares.serverErrorResolver(req,res,e)
