@@ -1,4 +1,4 @@
-import {pool} from "../../config/database"
+import pool from "../../config/database"
 import itemDao from "./itemDao"
 
 const itemProvider = {
@@ -22,6 +22,7 @@ const itemProvider = {
             });
 
             selectItemResult.forEach((row) => {
+            console.log(row)
             items[row.name].rentals.push({
                 owner_name: row.owner_name,
                 rental_time: row.rental_time,
@@ -31,6 +32,7 @@ const itemProvider = {
             const result = Object.values(items);
 
             connection.release();
+            console.log(result)
 
             return result[0]
         } catch (err){
@@ -41,12 +43,12 @@ const itemProvider = {
         }
     },
 
-    selectMyItem : async(itemId) => {
+    selectMyItem : async(itemId, userId) => {
         try {
             console.log("Select my item by id:", itemId);
             
             const connection = await pool.getConnection(async (conn) => conn);
-            const selectMyItemResult = await itemDao.selectMyByItemId(connection, itemId);
+            const selectMyItemResult = await itemDao.selectMyByItemId(connection, itemId, userId);
 
             connection.release();
 

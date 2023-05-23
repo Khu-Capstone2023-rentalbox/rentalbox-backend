@@ -20,20 +20,23 @@ const itemDao = {
         }
     },
     selectByItemId : async(connection, itemId) => {
-        const sql = `SELECT i.name, i.count, u.name AS owner_name, r.rental_time
-                    FROM items i
-                    JOIN rental r ON i.id = r.target
-                    JOIN user u ON r.owner = u.id
-                    WHERE i.id = ?;`
+        const sql = `SELECT i.name, i.count, u.name AS owner_name, DATE_FORMAT(DATE_ADD(r.rental_time, INTERVAL r.period DAY), '%Y-%m-%d') as rental_time
+        FROM items i
+        JOIN rental r ON i.id = r.target
+        JOIN user u ON r.owner = u.id
+        WHERE i.id = 20;`
         const [queryResult] = await connection.query(sql, itemId);
         return queryResult
     },
-    selectMyByItemId : async(connection, itemId) => {
-        const sql = `SELECT items.id, items.name AS target_name, rental.rental_time, rental.period
-                    FROM rental
-                    JOIN items ON rental.target = items.id
-                    WHERE rental.id = ?;`
-        const [queryResult] = await connection.query(sql, itemId);
+    selectMyByItemId : async(connection, itemId, userId) => {
+        const sql = `select i.name as itemName, DATE_FORMAT( r.rental_time, '%Y-%m-%d') as rentalDate, DATE_FORMAT( o.overdue_start ,'%Y-%m-%d') as overDueDate, o.charge
+        from items as i
+            join rental as r
+                on r.target = i.id
+                    join overdue as o
+                        on r.target = o.overdue_item
+                            where i.id = ${itemId} and o.overdue_user = '${userId}';`
+        const queryResult = await connection.query(sql);
         return queryResult[0]
     },
 

@@ -28,7 +28,7 @@ const itemController = {
     getItem : async(req,res) => {
         try{
             const itemId = req.params.itemId;
-            
+            console.log("fuck fuck fuck")
             if (!itemId)
                 return res.status(400).json(errResponse(errResponseObj.ITEMID_EXIT_ERROR))
 
@@ -45,25 +45,14 @@ const itemController = {
     getMyItem : async(req,res) => {
         try{
             const itemId = req.params.itemId;
-            
+            const {userId} = req.verifiedToken
+            console.log(userId)
             if (!itemId)
                 return res.status(400).json(errResponse(errResponseObj.ITEMID_EXIT_ERROR))
-            const selectItemInfo  = await itemProvider.selectItem(itemId);
+            const selectItemInfo  = await itemProvider.selectMyItem(itemId, userId);
             return res.json(response(responseObj, selectItemInfo));
         }catch(e){
-            middlewares.serverErrorResolver(req,res,e)
-        }
-    },
-    getMyItem : async(req,res) => {
-        try{
-            const itemId = req.params.itemId;
-            
-            if (!itemId)
-                return res.status(400).json(errResponse(errResponseObj.ITEMID_EXIT_ERROR))
-
-            const selectMyItemInfo  = await itemProvider.selectMyItem(itemId);
-            return res.json(response(responseObj, selectMyItemInfo));
-        }catch(e){
+            console.log("error")
             middlewares.serverErrorResolver(req,res,e)
         }
     },
