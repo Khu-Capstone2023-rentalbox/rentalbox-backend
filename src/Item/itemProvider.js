@@ -26,7 +26,7 @@ const itemProvider = {
             console.log(row)
             items[row.name].rentals.push({
                 owner_name: row.owner_name,
-                rental_time: row.rental_time,
+                return_time: row.return_time,
             });
             });
 

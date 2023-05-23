@@ -20,11 +20,11 @@ const itemDao = {
         }
     },
     selectByItemId : async(connection, itemId) => {
-        const sql = `SELECT i.name, i.count, u.name AS owner_name, DATE_FORMAT(DATE_ADD(r.rental_time, INTERVAL r.period DAY), '%Y-%m-%d') as rental_time
+        const sql = `SELECT i.name, i.count, u.name AS owner_name, DATE_FORMAT(DATE_ADD(r.rental_time, INTERVAL r.period DAY), '%Y-%m-%d') as return_time
         FROM items i
         JOIN rental r ON i.id = r.target
         JOIN user u ON r.owner = u.id
-        WHERE i.id = 20;`
+        WHERE i.id = ${itemId};`
         const [queryResult] = await connection.query(sql, itemId);
         return queryResult
     },
