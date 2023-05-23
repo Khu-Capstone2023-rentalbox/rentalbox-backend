@@ -7,7 +7,7 @@ import { response } from "../../config/response"
 const rootController = {
     getMainPage : async(req, res) =>{
         try{
-        const {userClub} = req.verifiedToken
+        const userClub = 2
         const {last} = req.query
         const result = await rootProvider.getMainItemList(userClub, last)
 

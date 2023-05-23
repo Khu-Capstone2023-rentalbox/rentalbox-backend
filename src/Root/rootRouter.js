@@ -5,7 +5,7 @@ import middlewares from "../../config/middlewares"
 
 const rootRouter = express.Router()
 
-rootRouter.get('/',middlewares.jwtMiddleware,rootController.getMainPage)
+rootRouter.get('/',rootController.getMainPage)
 
 
 export default rootRouter
