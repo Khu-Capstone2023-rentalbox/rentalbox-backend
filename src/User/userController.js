@@ -13,11 +13,16 @@ const userController = {
                 return res.status(400).json(errResponse(errResponseObj.SIGN_UP_EXIST_ERROR))
             
             const result = await userService.loginUser(memberId, clubId)
+            console.log(result)
+            const jsonObj = {
+                clubName : result.clubName,
+                token : result.token
+            }
             if (result.error){
                 return res.status(404).json(result.obj)
             }
             else{
-                return res.json(response(responseObj, result.token))
+                return res.json(response(responseObj, jsonObj))
             }
         }catch(e){
             middlewares.serverErrorResolver(req,res,e)

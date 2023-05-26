@@ -53,13 +53,13 @@ const userDao = {
         }
     },
     selectClubById : async(connection, clubId) =>{
-        const sql = `select id from club where id = ${clubId}`
+        const sql = `select name, id from club where id = ${clubId}`
         try{
             await connection.beginTransaction()
             const [queryResult] = await connection.execute(sql)
 
             await connection.commit()
-
+            console.log(queryResult)
             return queryResult
         }catch(e){
             console.log(e)

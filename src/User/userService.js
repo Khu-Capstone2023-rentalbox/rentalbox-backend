@@ -77,7 +77,7 @@ const userService = {
                 expiresIn : "30d",
                 subject : "userInfo"
             });
-                return {error : false, token}
+                return {error : false, token, clubName : clubExist[0].name}
         }
             else
                 return {error : true, obj : errResponse(errResponseObj.USER_NOT_CLUB)}
