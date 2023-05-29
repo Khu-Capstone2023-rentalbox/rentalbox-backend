@@ -9,7 +9,7 @@ itemRouter.post('/',middlewares.jwtMiddleware,itemController.addItem)
 itemRouter.get('/:itemId(\\d+)',middlewares.jwtMiddleware,itemController.getItem)
 itemRouter.get('/my-item/:itemId(\\d+)',middlewares.jwtMiddleware,itemController.getMyItem)
 itemRouter.get('/my-item-list',middlewares.jwtMiddleware, itemController.getMyList)
-itemRouter.post('/picture',middlewares.jwtMiddleware,middlewares.s3Upload.single('picture'), itemController.getItemListByPicture)
+itemRouter.post('/rent',middlewares.jwtMiddleware,middlewares.s3Upload.single('picture'), itemController.rentByPicture)
 
 
 export default itemRouter

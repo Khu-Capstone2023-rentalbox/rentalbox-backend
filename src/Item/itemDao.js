@@ -49,6 +49,46 @@ const itemDao = {
         const [queryResult] = await connection.query(sql);
         console.log(queryResult)
         return queryResult
+    },
+    selectBookIdByName : async(connection, title) =>{
+        const sql = `select id, count from items where name = '${title}'`
+        const [queryResult] = await connection.query(sql)
+        return queryResult
+    },
+    insertRental : async(connection, bookId, userId) =>{
+        const sql = `insert into rental(owner, target, period) VALUES (${userId},${bookId},${7});`
+        try{
+            await connection.beginTransaction()
+            const [queryResult] = await connection.query(sql);
+            console.log(queryResult)
+            await connection.commit()
+            return queryResult
+        }catch(e){
+            console.log(e)
+            await connection.rollback()
+            return {
+                error : true,
+                message : `error type : ${e.name}, error message : ${e.message}`
+            }
+        }
+    },
+    calcCountItem : async(connection, bookId) =>{
+        const sql = `update items set count = count - 1 where id =${bookId};`
+        console.log(sql)
+        try{
+            await connection.beginTransaction()
+            const [queryResult] = await connection.query(sql)
+            console.log(queryResult)
+            await connection.commit()
+            return queryResult
+        }catch(e){
+            console.log(e)
+            await connection.rollback()
+            return {
+                error : true,
+                message : `error type : ${e.name}, error message : ${e.message}`
+            }
+        }
     }
 }
 

@@ -82,6 +82,24 @@ const itemProvider = {
                 message : `error type : ${err.name}, error message : ${err.message}`
             } 
         }
+    },
+    selectBookId : async(title) =>{
+        try {
+            console.log("select book id by title in provider", title);
+
+            const connection = await pool.getConnection(async (conn) => conn);
+
+            const bookInfo = await itemDao.selectBookIdByName(connection, title)
+
+            connection.release();
+
+            return bookInfo
+        } catch (err){
+            return {
+                error : true,
+                message : `error type : ${err.name}, error message : ${err.message}`
+            } 
+        }
     }
 }
 
