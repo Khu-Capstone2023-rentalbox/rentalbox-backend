@@ -38,9 +38,26 @@ const itemController = {
             middlewares.serverErrorResolver(req,res,e)
         }
     },
-    getItemListByPicture : async(req,res) =>{
+    rentByPicture : async(req,res) =>{
         console.log(req.file.location)
-        res.json(req.file)
+        const {userId} = req.verifiedToken
+        if (typeof req.file.location == "undefined")
+            return res.status(400).json(errResponse(errResponseObj.NO_BOOK_PICTURE))
+        try{
+            const result = await itemService.rentItem(req.file.location, userId)
+            console.log("in controller", result)
+            if (result.error)
+            {
+                console.log("no count error")
+                if (result.count == 0)
+                    return res.status(404).json(errResponse(errResponseObj.NO_BOOK_REMAIN))
+            }
+            else
+                return res.json(response(responseObj))
+        }catch(e){
+            console.log("error occured!")
+            middlewares.serverErrorResolver(req,res,e)
+        }
     },
     getMyItem : async(req,res) => {
         try{
