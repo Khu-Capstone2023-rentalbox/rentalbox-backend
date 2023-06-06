@@ -10,4 +10,4 @@ app.listen(privateInfo.PORT, () => console.log(`server is ready! on port ${priva
     console.log("something is wrong")
 }
 
-schedule.scheduleJob('26 15 * * *', job)
+schedule.scheduleJob('12 23 * * *', job)

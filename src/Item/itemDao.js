@@ -20,11 +20,7 @@ const itemDao = {
         }
     },
     selectByItemId : async(connection, itemId) => {
-        const sql = `SELECT i.name, i.count, u.name AS owner_name, DATE_FORMAT(DATE_ADD(r.rental_time, INTERVAL r.period DAY), '%Y-%m-%d') as return_time
-        FROM items i
-        JOIN rental r ON i.id = r.target
-        JOIN user u ON r.owner = u.id
-        WHERE i.id = ${itemId};`
+        const sql = `select name, count from items where id = ${itemId};`
         const [queryResult] = await connection.query(sql, itemId);
         return queryResult
     },
@@ -89,6 +85,35 @@ const itemDao = {
                 message : `error type : ${e.name}, error message : ${e.message}`
             }
         }
+    },
+    addReturnItem : async(connection, bookId) =>{
+        const sql = `update items set count = count + 1 where id =${bookId};`
+        
+        const [queryResult] = await connection.query(sql)
+
+        return queryResult
+    },
+    returnRental : async(connection, userId ,bookId) =>{
+        const sql = `delete from rental where owner = '${userId}' and target = ${bookId};`
+
+        console.log(sql)
+        const [queryResult] = await connection.query(sql)
+
+        return queryResult
+    },
+    deleteOverDue : async(connection, userId, bookId) =>{
+        const sql = `delete from overdue where  overdue_user = '${userId}' and overdue_item = ${bookId};`
+
+        const [queryResult] = await connection.query(sql)
+
+        return queryResult
+    },
+    selectRentalById : async(connection, itemId) => {
+        const sql = `select (select name from user where owner = user.id) as owner_name, DATE_FORMAT(DATE_ADD(rental_time, INTERVAL period DAY), '%Y-%m-%d') as return_time from rental where target = ${itemId};`
+
+        const [queryResult] = await connection.query(sql)
+
+        return queryResult
     }
 }
 
