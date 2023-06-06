@@ -35,6 +35,8 @@ const userService = {
                 JSON.stringify({image : bookUrl})
         })
 
+
+        console.log(AIServerResult)
         const AIServerJson = await AIServerResult.json()
         console.log(AIServerJson.title)
 
@@ -63,6 +65,47 @@ const userService = {
             }
         }
         catch (err){
+            return {
+                error : true,
+                message : `error type : ${err.name}, error message : ${err.message}`
+            } 
+        }
+    },
+    returnItem : async(bookUrl, userId) =>{
+        const AIApi = 'http://221.163.248.33:8000/inference_url'
+        const AIServerResult = await fetch(AIApi,{
+            method : "POST",
+            headers : {
+                "Content-type" : "application/json"
+            },
+            body :
+                JSON.stringify({image : bookUrl})
+        })
+
+        const AIServerJson = await AIServerResult.json()
+        console.log(AIServerJson.title)
+        const bookInfo = await itemProvider.selectBookId(AIServerJson.title)
+
+        
+        const connection = await pool.getConnection(async conn => conn);
+        connection.beginTransaction()
+        try {
+            console.log(bookInfo)
+            const returnResult = await itemDao.returnRental(connection, userId, bookInfo[0].id);
+
+            const calcItem = await itemDao.addReturnItem(connection,bookInfo[0].id)
+
+            const overDueDeleteResult = await itemDao.deleteOverDue(connection, userId, bookInfo[0].id)
+            connection.commit()
+
+            return {
+                error : false
+            }
+
+        }
+        catch (err){
+
+            connection.rollback()
             return {
                 error : true,
                 message : `error type : ${err.name}, error message : ${err.message}`
