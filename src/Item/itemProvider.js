@@ -8,34 +8,19 @@ const itemProvider = {
             console.log("Select item by id:", itemId);
             
             const connection = await pool.getConnection(async (conn) => conn);
-            const selectItemResult = await itemDao.selectByItemId(connection, itemId);
+            const [selectItemResult] = await itemDao.selectByItemId(connection, itemId);
             
-            const items = {};
+            console.log(selectItemResult)
+            
+            const rentalListResult = await itemDao.selectRentalById(connection, itemId)
 
-            selectItemResult.forEach((row) => {
-            if (!items[row.name]) {
-                items[row.name] = {
-                name: row.name,
-                count: row.count,
-                rentals: [],
-                };
-            }
-            });
+            console.log(rentalListResult)
 
-            selectItemResult.forEach((row) => {
-            console.log(row)
-            items[row.name].rentals.push({
-                owner_name: row.owner_name,
-                return_time: row.return_time,
-            });
-            });
+            selectItemResult.rentals = rentalListResult
 
-            const result = Object.values(items);
+            console.log(selectItemResult)
 
-            connection.release();
-            console.log(result)
-
-            return result[0]
+            return selectItemResult
         } catch (err){
             return {
                 error : true,
