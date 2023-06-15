@@ -25,22 +25,24 @@ const userService = {
         }
     },
     rentItem : async(bookUrl, userId) =>{
-        const AIApi = 'http://221.163.248.33:8000/inference_url'
-        const AIServerResult = await fetch(AIApi,{
-            method : "POST",
-            headers : {
-                "Content-type" : "application/json"
-            },
-            body :
-                JSON.stringify({image : bookUrl})
-        })
+        // const AIApi = 'http://221.163.248.33:8000/inference_url'
+        // const AIServerResult = await fetch(AIApi,{
+        //     method : "POST",
+        //     headers : {
+        //         "Content-type" : "application/json"
+        //     },
+        //     body :
+        //         JSON.stringify({image : bookUrl})
+        // })
 
 
-        console.log(AIServerResult)
-        const AIServerJson = await AIServerResult.json()
-        console.log(AIServerJson.title)
+        // console.log(AIServerResult)
+        // const AIServerJson = await AIServerResult.json()
+        // console.log(AIServerJson.title)
 
-        const bookInfo = await itemProvider.selectBookId(AIServerJson.title)
+        const AIServerJson = '만들면서 배우는 파이토치 딥러닝'
+
+        const bookInfo = await itemProvider.selectBookId(AIServerJson)
 
         if(bookInfo[0].count == 0)
             return {
@@ -72,19 +74,21 @@ const userService = {
         }
     },
     returnItem : async(bookUrl, userId) =>{
-        const AIApi = 'http://221.163.248.33:8000/inference_url'
-        const AIServerResult = await fetch(AIApi,{
-            method : "POST",
-            headers : {
-                "Content-type" : "application/json"
-            },
-            body :
-                JSON.stringify({image : bookUrl})
-        })
+        // const AIApi = 'http://221.163.248.33:8000/inference_url'
+        // const AIServerResult = await fetch(AIApi,{
+        //     method : "POST",
+        //     headers : {
+        //         "Content-type" : "application/json"
+        //     },
+        //     body :
+        //         JSON.stringify({image : bookUrl})
+        // })
 
-        const AIServerJson = await AIServerResult.json()
-        console.log(AIServerJson.title)
-        const bookInfo = await itemProvider.selectBookId(AIServerJson.title)
+        // const AIServerJson = await AIServerResult.json()
+        // console.log(AIServerJson.title)
+
+        const AIServerJson = '만들면서 배우는 파이토치 딥러닝'
+        const bookInfo = await itemProvider.selectBookId(AIServerJson)
 
         
         const connection = await pool.getConnection(async conn => conn);
